@@ -1,0 +1,23 @@
+# Gradle files
+.gradle/
+build/
+
+# Local configuration file (sdk path, etc)
+local.properties
+
+# IDE files
+.idea/
+*.iml
+
+# Generated files
+**/build/
+.externalNativeBuild
+.cxx/
+
+# Keystore files
+*.jks
+*.keystore
+
+# Mac OS files
+.DS_Store
+git init
