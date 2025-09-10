@@ -8,21 +8,18 @@
         android:orientation="vertical"
         android:padding="24dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#F5F5F5">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etTitle"
             style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Title"
-            android:textColorHint="#616161">
+            android:hint="Title">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"/>
+                android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -31,13 +28,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Privy"
-            android:textColorHint="#616161">
+            android:hint="Privy">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"/>
+                android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -46,14 +41,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Account No"
-            android:textColorHint="#616161">
+            android:hint="Account No">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textColor="@android:color/black"/>
+                android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -62,13 +55,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Bank Name"
-            android:textColorHint="#616161">
+            android:hint="Bank Name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"/>
+                android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -77,13 +68,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="IFSC Code"
-            android:textColorHint="#616161">
+            android:hint="IFSC Code">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"/>
+                android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -92,13 +81,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="CIF No"
-            android:textColorHint="#616161">
+            android:hint="CIF No">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"/>
+                android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -107,13 +94,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Username"
-            android:textColorHint="#616161">
+            android:hint="Username">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"/>
+                android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -122,13 +107,11 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Profile Privy"
-            android:textColorHint="#616161">
+            android:hint="Profile Privy">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"/>
+                android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -137,14 +120,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="M PIN"
-            android:textColorHint="#616161">
+            android:hint="M PIN">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberPassword"
-                android:textColor="@android:color/black"/>
+                android:inputType="numberPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -153,14 +134,12 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="T PIN"
-            android:textColorHint="#616161">
+            android:hint="T PIN">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="numberPassword"
-                android:textColor="@android:color/black"/>
+                android:inputType="numberPassword"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -169,15 +148,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Notes"
-            android:textColorHint="#616161">
+            android:hint="Notes">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minLines="3"
-                android:gravity="top"
-                android:textColor="@android:color/black"/>
+                android:gravity="top"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 </ScrollView>

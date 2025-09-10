@@ -8,22 +8,19 @@
         android:orientation="vertical"
         android:padding="24dp"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#F5F5F5">
+        android:layout_height="wrap_content">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilName"
             style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name"
-            android:textColorHint="#616161">
+            android:hint="Name">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etName"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:textColor="@android:color/black"/>
+                android:layout_height="wrap_content"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -32,15 +29,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Aadhar Number"
-            android:textColorHint="#616161">
+            android:hint="Aadhar Number">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="number"
-                android:textColor="@android:color/black"/>
+                android:inputType="number"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -49,15 +44,13 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Date of Birth"
-            android:textColorHint="#616161">
+            android:hint="Date of Birth">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etDob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:inputType="date"
-                android:textColor="@android:color/black"/>
+                android:inputType="date"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -66,8 +59,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Address"
-            android:textColorHint="#616161">
+            android:hint="Address">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etAddress"
@@ -75,8 +67,7 @@
                 android:layout_height="wrap_content"
                 android:lines="3"
                 android:gravity="top"
-                android:inputType="textMultiLine"
-                android:textColor="@android:color/black"/>
+                android:inputType="textMultiLine"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
@@ -85,8 +76,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Notes"
-            android:textColorHint="#616161">
+            android:hint="Notes">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etNotes"
@@ -94,8 +84,7 @@
                 android:layout_height="wrap_content"
                 android:lines="3"
                 android:gravity="top"
-                android:inputType="textMultiLine"
-                android:textColor="@android:color/black"/>
+                android:inputType="textMultiLine"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
