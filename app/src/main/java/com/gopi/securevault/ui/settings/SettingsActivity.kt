@@ -10,6 +10,7 @@ import androidx.appcompat.app.AppCompatActivity
 import com.gopi.securevault.R
 import com.gopi.securevault.ui.auth.ChangePasswordActivity
 import com.gopi.securevault.ui.backup.BackupRestoreActivity
+import com.gopi.securevault.util.FeatureFlag
 import net.sqlcipher.database.SQLiteDatabase
 import java.io.File
 
@@ -29,7 +30,11 @@ class SettingsActivity : AppCompatActivity() {
         binding.toolbar.setNavigationOnClickListener { finish() }
 
         binding.btnBackupRestore.setOnClickListener {
-            Toast.makeText(this, "Coming soon...", Toast.LENGTH_SHORT).show()
+            if (FeatureFlag.IS_BACKUP_RESTORE_ENABLED) {
+                startActivity(Intent(this, BackupRestoreActivity::class.java))
+            } else {
+                Toast.makeText(this, "Coming soon...", Toast.LENGTH_SHORT).show()
+            }
         }
 
        // binding.btnChangePassword.setOnClickListener {

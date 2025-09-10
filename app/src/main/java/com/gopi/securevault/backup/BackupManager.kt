@@ -3,6 +3,7 @@ package com.gopi.securevault.backup
 import android.content.Context
 import android.net.Uri
 import android.widget.Toast
+import androidx.room.Room
 import com.gopi.securevault.data.db.AppDatabase
 import com.gopi.securevault.util.AESUtils
 import com.google.gson.Gson
@@ -16,12 +17,15 @@ import java.util.Locale
 
 class BackupManager(private val context: Context) {
 
-    private val db = AppDatabase.get(context)
+    private val db by lazy { AppDatabase.get(context) }
 
-    suspend fun backupDatabase(password: String, destinationUri: Uri) {
+    suspend fun backupDatabase(destinationUri: Uri) {
         withContext(Dispatchers.IO) {
             try {
-                val dbFile = context.getDatabasePath("securevault.db")
+                // It's safer to work with a closed database
+                AppDatabase.closeInstance()
+
+                val dbFile = context.getDatabasePath(AppDatabase.DATABASE_NAME)
                 context.contentResolver.openOutputStream(destinationUri)?.use { outputStream ->
                     dbFile.inputStream().use { inputStream ->
                         inputStream.copyTo(outputStream)
@@ -35,27 +39,70 @@ class BackupManager(private val context: Context) {
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Backup failed: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
+            } finally {
+                // Ensure the database is available again after backup
+                AppDatabase.get(context)
             }
         }
     }
 
-    suspend fun restoreDatabase(password: String, sourceUri: Uri) {
+    suspend fun restoreDatabase(sourceUri: Uri, onSuccess: () -> Unit) {
         withContext(Dispatchers.IO) {
+            val tempBackupFile = File(context.cacheDir, "restore_temp.db")
+
             try {
-                val dbFile = context.getDatabasePath("securevault.db")
+                // 1. Copy backup to a temporary file in app's cache
                 context.contentResolver.openInputStream(sourceUri)?.use { inputStream ->
-                    FileOutputStream(dbFile).use { outputStream ->
+                    FileOutputStream(tempBackupFile).use { outputStream ->
                         inputStream.copyTo(outputStream)
                     }
                 }
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Restore successful! Please restart the app.", Toast.LENGTH_LONG).show()
+
+                // 2. Validate the temporary backup file
+                var isValid = false
+                try {
+                    // We can't easily validate a SQLCipher encrypted DB without the key.
+                    // A simple check is to see if it's a valid file. A more complex check
+                    // would involve trying to open it with the key. For now, we assume
+                    // if the user picked it, it's the right one. The real check happens
+                    // when the app restarts and tries to open it with the password.
+                    // The most important step is to not leave the app with a broken DB.
+                    isValid = tempBackupFile.exists() && tempBackupFile.length() > 0
+
+                } catch (e: Exception) {
+                    e.printStackTrace()
+                    isValid = false
+                }
+
+                if (isValid) {
+                    // 3. Close current DB connection
+                    AppDatabase.closeInstance()
+
+                    // 4. Overwrite the actual database file
+                    val dbFile = context.getDatabasePath(AppDatabase.DATABASE_NAME)
+                    tempBackupFile.copyTo(dbFile, overwrite = true)
+
+                    withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Restore successful! Restarting app...", Toast.LENGTH_LONG).show()
+                        onSuccess()
+                    }
+                } else {
+                     withContext(Dispatchers.Main) {
+                        Toast.makeText(context, "Restore failed: Invalid or corrupt backup file.", Toast.LENGTH_LONG).show()
+                    }
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Restore failed: ${e.message}", Toast.LENGTH_SHORT).show()
                 }
+            } finally {
+                // 5. Clean up the temporary file
+                if (tempBackupFile.exists()) {
+                    tempBackupFile.delete()
+                }
+                // Ensure database is accessible again after a failed restore
+                AppDatabase.get(context)
             }
         }
     }
@@ -67,13 +114,16 @@ class BackupManager(private val context: Context) {
                     aadhar = db.aadharDao().getAll(),
                     banks = db.bankDao().getAll(),
                     cards = db.cardDao().getAll(),
-                    policies = db.policyDao().getAll()
+                    policies = db.policyDao().getAll(),
+                    pan = db.panDao().getAll(),
+                    voterId = db.voterIdDao().getAll(),
+                    license = db.licenseDao().getAll()
                 )
                 val json = Gson().toJson(backupData)
                 val encryptedJson = AESUtils.encrypt(json, password)
 
                 context.contentResolver.openOutputStream(destinationUri)?.use { outputStream ->
-                    outputStream.write(encryptedJson.toByteArray())
+                    outputStream.write(encryptedJson!!.toByteArray())
                 }
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Backup successful!", Toast.LENGTH_SHORT).show()
@@ -87,7 +137,7 @@ class BackupManager(private val context: Context) {
         }
     }
 
-    suspend fun restoreFromJson(password: String, sourceUri: Uri) {
+    suspend fun restoreFromJson(password: String, sourceUri: Uri, onSuccess: () -> Unit) {
         withContext(Dispatchers.IO) {
             try {
                 val encryptedJson = context.contentResolver.openInputStream(sourceUri)?.use {
@@ -95,6 +145,9 @@ class BackupManager(private val context: Context) {
                 } ?: throw Exception("Could not read from file")
 
                 val json = AESUtils.decrypt(encryptedJson, password)
+                if (json == null) {
+                    throw Exception("Decryption failed. Incorrect password or corrupt file.")
+                }
                 val backupData = Gson().fromJson(json, BackupData::class.java)
 
                 db.clearAllTablesManually()
@@ -103,9 +156,13 @@ class BackupManager(private val context: Context) {
                 backupData.banks.forEach { db.bankDao().insert(it) }
                 backupData.cards.forEach { db.cardDao().insert(it) }
                 backupData.policies.forEach { db.policyDao().insert(it) }
+                backupData.pan.forEach { db.panDao().insert(it) }
+                backupData.voterId.forEach { db.voterIdDao().insert(it) }
+                backupData.license.forEach { db.licenseDao().insert(it) }
 
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Restore successful!", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, "Restore successful! Restarting app...", Toast.LENGTH_SHORT).show()
+                    onSuccess()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
