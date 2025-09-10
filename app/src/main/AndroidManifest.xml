@@ -14,6 +14,10 @@
         android:theme="@style/Theme.SecureVault">
 
         <!-- All sensitive activities should NOT be exported -->
+        <activity
+            android:name=".ui.backup.BackupRestoreActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.settings.SettingsActivity" />
         <activity android:name=".ui.settings.SettingsActivity"
             android:exported="false"
             android:parentActivityName=".ui.home.HomeActivity" />
