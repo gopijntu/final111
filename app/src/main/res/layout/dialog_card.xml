@@ -9,120 +9,128 @@
         android:padding="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/login_background">
+        android:background="#F5F5F5">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etBankName"
-            style="@style/ThemedDialogInputStyle"
+            style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Bank Name">
+            android:hint="Bank Name"
+            android:textColorHint="#616161">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etCardNumber"
-            style="@style/ThemedDialogInputStyle"
+            style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Card Number">
+            android:hint="Card Number"
+            android:textColorHint="#616161">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etCardType"
-            style="@style/ThemedDialogInputStyle"
+            style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Card Type">
+            android:hint="Card Type"
+            android:textColorHint="#616161">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etValidTill"
-            style="@style/ThemedDialogInputStyle"
+            style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Valid Till">
+            android:hint="Valid Till"
+            android:textColorHint="#616161">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etCVV"
-            style="@style/ThemedDialogInputStyle"
+            style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="CVV">
+            android:hint="CVV"
+            android:textColorHint="#616161">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etCustomerId"
-            style="@style/ThemedDialogInputStyle"
+            style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Customer ID">
+            android:hint="Customer ID"
+            android:textColorHint="#616161">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etPin"
-            style="@style/ThemedDialogInputStyle"
+            style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="PIN">
+            android:hint="PIN"
+            android:textColorHint="#616161">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="numberPassword"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/etNotes"
-            style="@style/ThemedDialogInputStyle"
+            style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Notes">
+            android:hint="Notes"
+            android:textColorHint="#616161">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:minLines="3"
                 android:gravity="top"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
     </LinearLayout>
 </ScrollView>
