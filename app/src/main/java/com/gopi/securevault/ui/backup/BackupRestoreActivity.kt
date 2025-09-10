@@ -36,9 +36,11 @@ class BackupRestoreActivity : AppCompatActivity() {
     private val restoreDbLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.also { uri ->
-                lifecycleScope.launch {
-                    backupManager.restoreDatabase(uri) {
-                        restartApp()
+                showPasswordDialog { password ->
+                    lifecycleScope.launch {
+                        backupManager.restoreDatabase(password, uri) {
+                            restartApp()
+                        }
                     }
                 }
             }

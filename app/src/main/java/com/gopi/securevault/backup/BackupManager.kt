@@ -9,6 +9,8 @@ import com.gopi.securevault.util.AESUtils
 import com.google.gson.Gson
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import net.sqlcipher.database.SQLiteDatabase
+import net.sqlcipher.database.SupportFactory
 import java.io.File
 import java.io.FileOutputStream
 import java.text.SimpleDateFormat
@@ -46,9 +48,10 @@ class BackupManager(private val context: Context) {
         }
     }
 
-    suspend fun restoreDatabase(sourceUri: Uri, onSuccess: () -> Unit) {
+    suspend fun restoreDatabase(password: String, sourceUri: Uri, onSuccess: () -> Unit) {
         withContext(Dispatchers.IO) {
             val tempBackupFile = File(context.cacheDir, "restore_temp.db")
+            val tempBackupDbName = "restore_temp.db"
 
             try {
                 // 1. Copy backup to a temporary file in app's cache
@@ -58,17 +61,17 @@ class BackupManager(private val context: Context) {
                     }
                 }
 
-                // 2. Validate the temporary backup file
+                // 2. Validate the temporary backup file with the provided password
                 var isValid = false
                 try {
-                    // We can't easily validate a SQLCipher encrypted DB without the key.
-                    // A simple check is to see if it's a valid file. A more complex check
-                    // would involve trying to open it with the key. For now, we assume
-                    // if the user picked it, it's the right one. The real check happens
-                    // when the app restarts and tries to open it with the password.
-                    // The most important step is to not leave the app with a broken DB.
-                    isValid = tempBackupFile.exists() && tempBackupFile.length() > 0
+                    val factory = SupportFactory(SQLiteDatabase.getBytes(password.toCharArray()))
+                    val tempDb = Room.databaseBuilder(context, AppDatabase::class.java, tempBackupDbName)
+                        .openHelperFactory(factory)
+                        .build()
 
+                    tempDb.openHelper.writableDatabase // This will trigger schema validation and password check
+                    tempDb.close()
+                    isValid = true
                 } catch (e: Exception) {
                     e.printStackTrace()
                     isValid = false
@@ -88,7 +91,7 @@ class BackupManager(private val context: Context) {
                     }
                 } else {
                      withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Restore failed: Invalid or corrupt backup file.", Toast.LENGTH_LONG).show()
+                        Toast.makeText(context, "Restore failed: Incorrect password or corrupt backup file.", Toast.LENGTH_LONG).show()
                     }
                 }
             } catch (e: Exception) {
