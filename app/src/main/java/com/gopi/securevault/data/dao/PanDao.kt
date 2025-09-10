@@ -9,6 +9,9 @@ interface PanDao {
     @Query("SELECT * FROM pan")
     fun observeAll(): Flow<List<PanEntity>>
 
+    @Query("SELECT * FROM pan")
+    suspend fun getAll(): List<PanEntity>
+
     @Insert
     suspend fun insert(entity: PanEntity)
 
