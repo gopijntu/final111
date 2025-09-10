@@ -27,4 +27,15 @@
         <item name="boxCornerRadiusBottomStart">16dp</item>
         <item name="boxCornerRadiusBottomEnd">16dp</item>
     </style>
+
+    <!-- Style for input fields in themed dialogs with dark backgrounds -->
+    <style name="ThemedDialogInputStyle" parent="Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+        <item name="boxCornerRadiusTopStart">16dp</item>
+        <item name="boxCornerRadiusTopEnd">16dp</item>
+        <item name="boxCornerRadiusBottomStart">16dp</item>
+        <item name="boxCornerRadiusBottomEnd">16dp</item>
+        <item name="hintTextColor">#B3FFFFFF</item> <!-- Semi-transparent white for hint -->
+        <item name="boxStrokeColor">#FFFFFF</item>
+        <item name="boxBackgroundColor">#50000000</item> <!-- Semi-transparent black background for the input area -->
+    </style>
 </resources>
