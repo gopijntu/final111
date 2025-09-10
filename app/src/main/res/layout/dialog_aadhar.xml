@@ -9,61 +9,65 @@
         android:padding="24dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/login_background">
+        android:background="#F5F5F5">
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilName"
-            style="@style/ThemedDialogInputStyle"
+            style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Name">
+            android:hint="Name"
+            android:textColorHint="#616161">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etName"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilNumber"
-            style="@style/ThemedDialogInputStyle"
+            style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Aadhar Number">
+            android:hint="Aadhar Number"
+            android:textColorHint="#616161">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etNumber"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="number"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilDob"
-            style="@style/ThemedDialogInputStyle"
+            style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Date of Birth">
+            android:hint="Date of Birth"
+            android:textColorHint="#616161">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etDob"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:inputType="date"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilAddress"
-            style="@style/ThemedDialogInputStyle"
+            style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Address">
+            android:hint="Address"
+            android:textColorHint="#616161">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etAddress"
@@ -72,16 +76,17 @@
                 android:lines="3"
                 android:gravity="top"
                 android:inputType="textMultiLine"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:id="@+id/tilNotes"
-            style="@style/ThemedDialogInputStyle"
+            style="@style/RoundedInputStyle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:hint="Notes">
+            android:hint="Notes"
+            android:textColorHint="#616161">
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/etNotes"
@@ -90,7 +95,7 @@
                 android:lines="3"
                 android:gravity="top"
                 android:inputType="textMultiLine"
-                android:textColor="@android:color/white"/>
+                android:textColor="@android:color/black"/>
         </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.button.MaterialButton
@@ -99,8 +104,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="Upload PDF"
-            android:backgroundTint="@android:color/white"
-            android:textColor="@android:color/black"/>
+            android:text="Upload PDF"/>
     </LinearLayout>
 </ScrollView>
