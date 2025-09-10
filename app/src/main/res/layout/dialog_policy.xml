@@ -4,11 +4,12 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="24dp">
+    android:padding="24dp"
+    android:background="@drawable/login_background">
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilName"
-        style="@style/RoundedInputStyle"
+        style="@style/ThemedDialogInputStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:hint="Policy Name">
@@ -16,12 +17,13 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etName"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilAccount"
-        style="@style/RoundedInputStyle"
+        style="@style/ThemedDialogInputStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -30,12 +32,13 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etAccount"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilCompany"
-        style="@style/RoundedInputStyle"
+        style="@style/ThemedDialogInputStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -44,12 +47,13 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etCompany"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilNextPremiumDate"
-        style="@style/RoundedInputStyle"
+        style="@style/ThemedDialogInputStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -58,12 +62,13 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etNextPremiumDate"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilPremiumValue"
-        style="@style/RoundedInputStyle"
+        style="@style/ThemedDialogInputStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -72,12 +77,13 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etPremiumValue"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilMaturityValue"
-        style="@style/RoundedInputStyle"
+        style="@style/ThemedDialogInputStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -86,12 +92,13 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etMaturityValue"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content" />
+            android:layout_height="wrap_content"
+            android:textColor="@android:color/white"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/tilNotes"
-        style="@style/RoundedInputStyle"
+        style="@style/ThemedDialogInputStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -102,7 +109,8 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:minLines="3"
-            android:gravity="top"/>
+            android:gravity="top"
+            android:textColor="@android:color/white"/>
     </com.google.android.material.textfield.TextInputLayout>
 
 </LinearLayout>
