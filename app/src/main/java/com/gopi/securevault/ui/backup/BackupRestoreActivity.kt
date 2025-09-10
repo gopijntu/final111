@@ -12,6 +12,7 @@ import androidx.lifecycle.lifecycleScope
 import com.gopi.securevault.backup.BackupManager
 import com.gopi.securevault.databinding.ActivityBackupRestoreBinding
 import com.gopi.securevault.R
+import com.gopi.securevault.ui.auth.LoginActivity
 import com.gopi.securevault.util.CryptoPrefs
 import com.gopi.securevault.util.PasswordUtils
 import kotlinx.coroutines.launch
@@ -25,10 +26,8 @@ class BackupRestoreActivity : AppCompatActivity() {
     private val backupDbLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.also { uri ->
-                showPasswordDialog { password ->
-                    lifecycleScope.launch {
-                        backupManager.backupDatabase(password, uri)
-                    }
+                lifecycleScope.launch {
+                    backupManager.backupDatabase(uri)
                 }
             }
         }
@@ -37,9 +36,9 @@ class BackupRestoreActivity : AppCompatActivity() {
     private val restoreDbLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.also { uri ->
-                showPasswordDialog { password ->
-                    lifecycleScope.launch {
-                        backupManager.restoreDatabase(password, uri)
+                lifecycleScope.launch {
+                    backupManager.restoreDatabase(uri) {
+                        restartApp()
                     }
                 }
             }
@@ -63,7 +62,9 @@ class BackupRestoreActivity : AppCompatActivity() {
             result.data?.data?.also { uri ->
                 showPasswordDialog { password ->
                     lifecycleScope.launch {
-                        backupManager.restoreFromJson(password, uri)
+                        backupManager.restoreFromJson(password, uri) {
+                            restartApp()
+                        }
                     }
                 }
             }
@@ -140,6 +141,13 @@ class BackupRestoreActivity : AppCompatActivity() {
             }
             .setNegativeButton("Cancel", null)
             .show()
+    }
+
+    private fun restartApp() {
+        val intent = Intent(this, LoginActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK)
+        startActivity(intent)
+        finish()
     }
 
     private fun openFilePickerForDbBackup() {
