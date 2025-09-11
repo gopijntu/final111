@@ -9,6 +9,8 @@ import com.gopi.securevault.data.entities.*
 import net.sqlcipher.database.SupportFactory
 import net.sqlcipher.database.SQLiteDatabase
 import com.gopi.securevault.util.CryptoPrefs
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 
 @Database(
     entities = [BankEntity::class, CardEntity::class, PolicyEntity::class, AadharEntity::class, PanEntity::class, VoterIdEntity::class, LicenseEntity::class],
@@ -61,42 +63,51 @@ abstract class AppDatabase : RoomDatabase() {
             INSTANCE = null
         }
 
-        suspend fun migrateToNewPassword(context: Context, oldHash: String, newHash: String) {
+        suspend fun migrateToNewPassword(context: Context, oldHash: String, newHash: String) = withContext(Dispatchers.IO) {
+            // --- Step 1: Read all data from the old database into memory ---
+            val oldFactory = SupportFactory(SQLiteDatabase.getBytes(oldHash.toCharArray()))
+            val oldDb = Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+                .openHelperFactory(oldFactory)
+                .build()
+
+            val aadharList = oldDb.aadharDao().getAll()
+            val bankList = oldDb.bankDao().getAll()
+            val cardList = oldDb.cardDao().getAll()
+            val licenseList = oldDb.licenseDao().getAll()
+            val panList = oldDb.panDao().getAll()
+            val policyList = oldDb.policyDao().getAll()
+            val voterIdList = oldDb.voterIdDao().getAll()
+
+            oldDb.close()
+
+            // --- Step 2: Create a new temp database and write the data into it ---
             val tempDbName = "securevault_temp.db"
             val tempDbFile = context.getDatabasePath(tempDbName)
             if (tempDbFile.exists()) {
                 tempDbFile.delete()
             }
 
-            // 1. Create a new, empty database with the new password hash
             val newFactory = SupportFactory(SQLiteDatabase.getBytes(newHash.toCharArray()))
             val newDb = Room.databaseBuilder(context, AppDatabase::class.java, tempDbName)
                 .openHelperFactory(newFactory)
-                .setJournalMode(JournalMode.TRUNCATE) // Disable WAL for safe file copy
                 .build()
 
-            // 2. Open the old database with the old password hash
-            val oldFactory = SupportFactory(SQLiteDatabase.getBytes(oldHash.toCharArray()))
-            val oldDb = Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
-                .openHelperFactory(oldFactory)
-                .setJournalMode(JournalMode.TRUNCATE) // Disable WAL for safe file copy
-                .build()
+            newDb.aadharDao().insertAll(aadharList)
+            newDb.bankDao().insertAll(bankList)
+            newDb.cardDao().insertAll(cardList)
+            newDb.licenseDao().insertAll(licenseList)
+            newDb.panDao().insertAll(panList)
+            newDb.policyDao().insertAll(policyList)
+            newDb.voterIdDao().insertAll(voterIdList)
 
-            // 3. Copy data from old DB to new DB for all tables
-            newDb.aadharDao().insertAll(oldDb.aadharDao().getAll())
-            newDb.bankDao().insertAll(oldDb.bankDao().getAll())
-            newDb.cardDao().insertAll(oldDb.cardDao().getAll())
-            newDb.licenseDao().insertAll(oldDb.licenseDao().getAll())
-            newDb.panDao().insertAll(oldDb.panDao().getAll())
-            newDb.policyDao().insertAll(oldDb.policyDao().getAll())
-            newDb.voterIdDao().insertAll(oldDb.voterIdDao().getAll())
-
-            // 4. Close both database connections
-            oldDb.close()
             newDb.close()
 
-            // 5. Replace the old database file with the new one
+            // --- Step 3: Replace the original DB with the new temp DB ---
             val originalDbFile = context.getDatabasePath(DATABASE_NAME)
+            // To be safe, delete the original db's journal files if they exist
+            context.getDatabasePath("$DATABASE_NAME-shm").delete()
+            context.getDatabasePath("$DATABASE_NAME-wal").delete()
+
             tempDbFile.copyTo(originalDbFile, overwrite = true)
             tempDbFile.delete()
         }

@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface PanDao {
-    @Query("SELECT * FROM pan")
+    @Query("SELECT * FROM pan ORDER BY id DESC")
     fun observeAll(): Flow<List<PanEntity>>
 
     @Query("SELECT * FROM pan")

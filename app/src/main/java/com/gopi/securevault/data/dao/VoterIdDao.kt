@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface VoterIdDao {
-    @Query("SELECT * FROM voter_id")
+    @Query("SELECT * FROM voter_id ORDER BY id DESC")
     fun observeAll(): Flow<List<VoterIdEntity>>
 
     @Query("SELECT * FROM voter_id")

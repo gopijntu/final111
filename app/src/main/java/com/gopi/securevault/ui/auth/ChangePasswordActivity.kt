@@ -76,6 +76,8 @@ class ChangePasswordActivity : AppCompatActivity() {
                     } catch (e: Exception) {
                         e.printStackTrace()
                         Toast.makeText(this@ChangePasswordActivity, "Failed to change password: ${e.message}", Toast.LENGTH_LONG).show()
+                        // Attempt to restore the original DB instance if migration fails
+                        AppDatabase.get(applicationContext)
                     }
                 }
             } else {

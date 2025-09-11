@@ -6,7 +6,7 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface LicenseDao {
-    @Query("SELECT * FROM license")
+    @Query("SELECT * FROM license ORDER BY id DESC")
     fun observeAll(): Flow<List<LicenseEntity>>
 
     @Query("SELECT * FROM license")
