@@ -72,12 +72,14 @@ abstract class AppDatabase : RoomDatabase() {
             val newFactory = SupportFactory(SQLiteDatabase.getBytes(newHash.toCharArray()))
             val newDb = Room.databaseBuilder(context, AppDatabase::class.java, tempDbName)
                 .openHelperFactory(newFactory)
+                .setJournalMode(JournalMode.TRUNCATE) // Disable WAL for safe file copy
                 .build()
 
             // 2. Open the old database with the old password hash
             val oldFactory = SupportFactory(SQLiteDatabase.getBytes(oldHash.toCharArray()))
             val oldDb = Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
                 .openHelperFactory(oldFactory)
+                .setJournalMode(JournalMode.TRUNCATE) // Disable WAL for safe file copy
                 .build()
 
             // 3. Copy data from old DB to new DB for all tables
