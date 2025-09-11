@@ -15,6 +15,9 @@ interface VoterIdDao {
     @Insert
     suspend fun insert(entity: VoterIdEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(entities: List<VoterIdEntity>)
+
     @Update
     suspend fun update(entity: VoterIdEntity)
 

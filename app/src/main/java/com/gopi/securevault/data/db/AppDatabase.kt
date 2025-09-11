@@ -60,5 +60,43 @@ abstract class AppDatabase : RoomDatabase() {
             INSTANCE?.close()
             INSTANCE = null
         }
+
+        suspend fun migrateToNewPassword(context: Context, oldHash: String, newHash: String) {
+            val tempDbName = "securevault_temp.db"
+            val tempDbFile = context.getDatabasePath(tempDbName)
+            if (tempDbFile.exists()) {
+                tempDbFile.delete()
+            }
+
+            // 1. Create a new, empty database with the new password hash
+            val newFactory = SupportFactory(SQLiteDatabase.getBytes(newHash.toCharArray()))
+            val newDb = Room.databaseBuilder(context, AppDatabase::class.java, tempDbName)
+                .openHelperFactory(newFactory)
+                .build()
+
+            // 2. Open the old database with the old password hash
+            val oldFactory = SupportFactory(SQLiteDatabase.getBytes(oldHash.toCharArray()))
+            val oldDb = Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
+                .openHelperFactory(oldFactory)
+                .build()
+
+            // 3. Copy data from old DB to new DB for all tables
+            newDb.aadharDao().insertAll(oldDb.aadharDao().getAll())
+            newDb.bankDao().insertAll(oldDb.bankDao().getAll())
+            newDb.cardDao().insertAll(oldDb.cardDao().getAll())
+            newDb.licenseDao().insertAll(oldDb.licenseDao().getAll())
+            newDb.panDao().insertAll(oldDb.panDao().getAll())
+            newDb.policyDao().insertAll(oldDb.policyDao().getAll())
+            newDb.voterIdDao().insertAll(oldDb.voterIdDao().getAll())
+
+            // 4. Close both database connections
+            oldDb.close()
+            newDb.close()
+
+            // 5. Replace the old database file with the new one
+            val originalDbFile = context.getDatabasePath(DATABASE_NAME)
+            tempDbFile.copyTo(originalDbFile, overwrite = true)
+            tempDbFile.delete()
+        }
     }
 }

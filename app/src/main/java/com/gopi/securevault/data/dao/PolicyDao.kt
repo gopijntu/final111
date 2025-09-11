@@ -15,6 +15,9 @@ interface PolicyDao {
     @Insert
     suspend fun insert(entity: PolicyEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(entities: List<PolicyEntity>)
+
     @Update
     suspend fun update(entity: PolicyEntity)
 

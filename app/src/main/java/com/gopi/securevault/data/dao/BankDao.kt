@@ -15,6 +15,9 @@ interface BankDao {
     @Insert
     suspend fun insert(entity: BankEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(entities: List<BankEntity>)
+
     @Update
     suspend fun update(entity: BankEntity)
 

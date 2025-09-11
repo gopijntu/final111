@@ -15,6 +15,9 @@ interface LicenseDao {
     @Insert
     suspend fun insert(entity: LicenseEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(entities: List<LicenseEntity>)
+
     @Update
     suspend fun update(entity: LicenseEntity)
 

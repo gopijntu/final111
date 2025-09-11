@@ -4,10 +4,12 @@ import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.lifecycleScope
+import com.gopi.securevault.data.db.AppDatabase
 import com.gopi.securevault.databinding.ActivityChangePasswordBinding
 import com.gopi.securevault.util.CryptoPrefs
 import com.gopi.securevault.util.PasswordUtils
-import net.sqlcipher.database.SQLiteDatabase
+import kotlinx.coroutines.launch
 
 class ChangePasswordActivity : AppCompatActivity() {
 
@@ -49,35 +51,32 @@ class ChangePasswordActivity : AppCompatActivity() {
             }
 
             if (PasswordUtils.hashWithSalt(oldPassword, salt) == oldHash) {
-                val newSalt = PasswordUtils.generateSalt()
-                val newHash = PasswordUtils.hashWithSalt(newPassword, newSalt)
+                lifecycleScope.launch {
+                    try {
+                        val newSalt = PasswordUtils.generateSalt()
+                        val newHash = PasswordUtils.hashWithSalt(newPassword, newSalt)
 
-                try {
-                    val dbFile = getDatabasePath("securevault.db")
-                    if (dbFile.exists()) {
-                        // Open the database with the old hash
-                        val db = SQLiteDatabase.openDatabase(dbFile.absolutePath, oldHash.toCharArray(), null, SQLiteDatabase.OPEN_READWRITE)
-                        // Re-key it to the new hash using the robust API call
-                        db.rekey(newHash.toCharArray())
-                        db.close()
+                        // Close the active instance before migration
+                        AppDatabase.closeInstance()
+
+                        // Perform the migration
+                        AppDatabase.migrateToNewPassword(applicationContext, oldHash, newHash)
+
+                        // If migration succeeds, update prefs
+                        prefs.putString("salt", newSalt)
+                        prefs.putString("master_hash", newHash)
+
+                        Toast.makeText(this@ChangePasswordActivity, "Password changed successfully. Please log in again.", Toast.LENGTH_LONG).show()
+
+                        val intent = Intent(this@ChangePasswordActivity, LoginActivity::class.java)
+                        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                        startActivity(intent)
+                        finish()
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        Toast.makeText(this@ChangePasswordActivity, "Failed to change password: ${e.message}", Toast.LENGTH_LONG).show()
                     }
-
-                    // --- Critical: Update prefs ONLY after successful rekey ---
-                    prefs.putString("salt", newSalt)
-                    prefs.putString("master_hash", newHash)
-
-                    // Close the singleton instance to force re-initialization on next launch
-                    com.gopi.securevault.data.db.AppDatabase.closeInstance()
-
-                    Toast.makeText(this, "Password changed successfully. Please log in again.", Toast.LENGTH_LONG).show()
-
-                    val intent = Intent(this, LoginActivity::class.java)
-                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    finish()
-
-                } catch (e: Exception) {
-                    Toast.makeText(this, "Error re-keying database. Password not changed. Error: ${e.message}", Toast.LENGTH_LONG).show()
                 }
             } else {
                 Toast.makeText(this, "Old password is incorrect", Toast.LENGTH_SHORT).show()

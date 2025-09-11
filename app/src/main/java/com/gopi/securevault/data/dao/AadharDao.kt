@@ -15,6 +15,9 @@ interface AadharDao {
     @Insert
     suspend fun insert(entity: AadharEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(entities: List<AadharEntity>)
+
     @Update
     suspend fun update(entity: AadharEntity)
 

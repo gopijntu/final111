@@ -15,6 +15,9 @@ interface PanDao {
     @Insert
     suspend fun insert(entity: PanEntity)
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertAll(entities: List<PanEntity>)
+
     @Update
     suspend fun update(entity: PanEntity)
 
