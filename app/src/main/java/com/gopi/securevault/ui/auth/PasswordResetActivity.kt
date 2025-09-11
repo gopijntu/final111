@@ -20,19 +20,12 @@ class PasswordResetActivity : AppCompatActivity() {
         binding = ActivityPasswordResetBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        // ❌ Removed screenshot restriction
-        // window.setFlags(
-        //     android.view.WindowManager.LayoutParams.FLAG_SECURE,
-        //     android.view.WindowManager.LayoutParams.FLAG_SECURE
-        // )
-
         setSupportActionBar(binding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
         binding.toolbar.setNavigationOnClickListener { finish() }
 
         prefs = CryptoPrefs(this)
 
-        // --- Safe check for security answers ---
         val a1hash = prefs.getString("a1_hash", null)
         val a2hash = prefs.getString("a2_hash", null)
         val salt1 = prefs.getString("a1_salt", null)
@@ -45,11 +38,8 @@ class PasswordResetActivity : AppCompatActivity() {
             return
         }
 
-        binding.tvQ1.text = prefs.getString("q1", "Question 1")
-        binding.tvQ2.text = prefs.getString("q2", "Question 2")
-
-        // ✅ Ensure all input text & outlines are visible
-        forceVisibleInputs()
+        binding.tvQ1.text = "Security Question 1: ${prefs.getString("q1", "")}"
+        binding.tvQ2.text = "Security Question 2: ${prefs.getString("q2", "")}"
 
         binding.btnSubmit.setOnClickListener {
             val a1 = binding.etAnswer1.text.toString().trim()
@@ -57,7 +47,6 @@ class PasswordResetActivity : AppCompatActivity() {
             val n1 = binding.etNewPassword.text.toString().trim()
             val n2 = binding.etConfirmPassword.text.toString().trim()
 
-            // Validate password fields
             if (n1 != n2) {
                 Toast.makeText(this, "Passwords do not match", Toast.LENGTH_SHORT).show()
                 return@setOnClickListener
@@ -68,12 +57,10 @@ class PasswordResetActivity : AppCompatActivity() {
                 return@setOnClickListener
             }
 
-            // Hash user answers with stored salts
             val h1 = PasswordUtils.hashWithSalt(a1, salt1)
             val h2 = PasswordUtils.hashWithSalt(a2, salt2)
 
             if (h1 == a1hash && h2 == a2hash) {
-                // ✅ Correct answers: reset password
                 val newSalt = PasswordUtils.generateSalt()
                 val newHash = PasswordUtils.hashWithSalt(n1, newSalt)
 
@@ -92,7 +79,6 @@ class PasswordResetActivity : AppCompatActivity() {
                         db.close()
                     }
                 } catch (_: Exception) {
-                    // Ignore rekey failure silently
                 }
 
                 prefs.putString("salt", newSalt)
@@ -101,7 +87,6 @@ class PasswordResetActivity : AppCompatActivity() {
                 Toast.makeText(this, "Password reset successfully", Toast.LENGTH_SHORT).show()
                 finish()
             } else {
-                // ❌ Wrong answers
                 attempts++
                 if (attempts >= 5) {
                     Toast.makeText(this, "Too many wrong attempts. Try again in 5 seconds.", Toast.LENGTH_LONG).show()
@@ -109,40 +94,11 @@ class PasswordResetActivity : AppCompatActivity() {
                     binding.btnSubmit.postDelayed({
                         binding.btnSubmit.isEnabled = true
                         attempts = 0
-                    }, 5000) // 5 second lockout
+                    }, 5000)
                 } else {
                     Toast.makeText(this, "Reset failed. Please try again.", Toast.LENGTH_SHORT).show()
                 }
             }
-        }
-    }
-
-    private fun forceVisibleInputs() {
-        // Ensure all inputs always show white text & borders
-        val textInputs = listOf(
-            binding.tilAnswer1,
-            binding.tilAnswer2,
-            binding.tilNewPassword,
-            binding.tilConfirmPassword
-        )
-
-        for (til in textInputs) {
-            til.setBoxStrokeColorStateList(
-                android.content.res.ColorStateList.valueOf(getColor(android.R.color.white))
-            )
-            til.hintTextColor = android.content.res.ColorStateList.valueOf(getColor(android.R.color.darker_gray))
-        }
-
-        val edits = listOf(
-            binding.etAnswer1,
-            binding.etAnswer2,
-            binding.etNewPassword,
-            binding.etConfirmPassword
-        )
-
-        for (edit in edits) {
-            edit.setTextColor(getColor(android.R.color.white))
-            edit.setHintTextColor(getColor(android.R.color.darker_gray))
         }
     }
 }
