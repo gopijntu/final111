@@ -20,11 +20,13 @@ import com.gopi.securevault.ui.pan.PanActivity
 import com.gopi.securevault.ui.policies.PoliciesActivity
 import com.gopi.securevault.ui.settings.SettingsActivity
 import com.gopi.securevault.ui.voterid.VoterIdActivity
+import com.gopi.securevault.util.CryptoPrefs
 import com.google.android.material.card.MaterialCardView
 
 class HomeActivity : BaseActivity() {
 
     private lateinit var binding: ActivityHomeBinding
+    private lateinit var prefs: CryptoPrefs
 
     private lateinit var menuCards: List<MaterialCardView>
     private val handler = Handler(Looper.getMainLooper())
@@ -38,6 +40,10 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        prefs = CryptoPrefs(this)
+        val username = prefs.getString("user_name", "User")
+        binding.tvWelcome.text = "Welcome $username"
 
         // Initialize cards in proper sequence
         menuCards = listOf(

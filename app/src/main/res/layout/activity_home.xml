@@ -14,9 +14,9 @@
         android:id="@+id/tvWelcome"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:layout_marginTop="48dp"
         android:gravity="center"
-        android:text="Welcome Back!"
+        tools:text="Welcome User"
         android:textColor="@android:color/white"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -28,14 +28,13 @@
     <GridLayout
         android:id="@+id/grid_layout"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_marginTop="16dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
         android:alignmentMode="alignMargins"
         android:columnCount="2"
         android:columnOrderPreserved="false"
         android:padding="4dp"
         android:rowCount="4"
-        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
         app:layout_constraintTop_toBottomOf="@id/tvWelcome">
 
         <!-- Banks -->
@@ -342,7 +341,7 @@
         android:id="@+id/tvFooter"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="24dp"
+        android:layout_marginBottom="32dp"
         android:gravity="center"
         android:text="Designed &amp; Created by Gopinath Kumbha"
         android:textAppearance="?attr/textAppearanceCaption"

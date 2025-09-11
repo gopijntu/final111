@@ -66,6 +66,9 @@ class ChangePasswordActivity : AppCompatActivity() {
                 prefs.putString("salt", newSalt)
                 prefs.putString("master_hash", newHash)
 
+                // Close the existing DB instance to force re-creation with the new key upon next access.
+                com.gopi.securevault.data.db.AppDatabase.closeInstance()
+
                 Toast.makeText(this, "Password changed successfully. Please log in again.", Toast.LENGTH_LONG).show()
 
                 val intent = Intent(this, LoginActivity::class.java)

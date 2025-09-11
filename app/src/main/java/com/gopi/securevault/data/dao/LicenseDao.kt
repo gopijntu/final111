@@ -9,9 +9,6 @@ interface LicenseDao {
     @Query("SELECT * FROM license")
     fun observeAll(): Flow<List<LicenseEntity>>
 
-    @Query("SELECT * FROM license")
-    suspend fun getAll(): List<LicenseEntity>
-
     @Insert
     suspend fun insert(entity: LicenseEntity)
 

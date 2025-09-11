@@ -9,9 +9,6 @@ interface VoterIdDao {
     @Query("SELECT * FROM voter_id")
     fun observeAll(): Flow<List<VoterIdEntity>>
 
-    @Query("SELECT * FROM voter_id")
-    suspend fun getAll(): List<VoterIdEntity>
-
     @Insert
     suspend fun insert(entity: VoterIdEntity)
 
