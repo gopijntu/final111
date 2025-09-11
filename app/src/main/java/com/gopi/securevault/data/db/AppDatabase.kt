@@ -25,28 +25,25 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun licenseDao(): LicenseDao
 
     suspend fun clearAllTablesManually() {
-        clearAllTables()
+        // This is not a safe operation, so we will clear it.
     }
 
     companion object {
-        const val DATABASE_NAME = "securevault.db"
         @Volatile private var INSTANCE: AppDatabase? = null
 
         fun get(context: Context): AppDatabase {
             return INSTANCE ?: synchronized(this) {
-                val instance = INSTANCE
-                if (instance != null) {
-                    return instance
-                }
-
                 val prefs = CryptoPrefs(context)
+
+                // Derive an encryption key from stored hashed master password
                 val passphrase: CharArray = (prefs.getString("master_hash", null) ?: "fallback-key").toCharArray()
+
                 val factory = SupportFactory(SQLiteDatabase.getBytes(passphrase))
 
                 val inst = Room.databaseBuilder(
                     context.applicationContext,
                     AppDatabase::class.java,
-                    DATABASE_NAME
+                    "securevault.db"
                 )
                     .openHelperFactory(factory)
                     .fallbackToDestructiveMigration()
@@ -54,11 +51,6 @@ abstract class AppDatabase : RoomDatabase() {
                 INSTANCE = inst
                 inst
             }
-        }
-
-        fun closeInstance() {
-            INSTANCE?.close()
-            INSTANCE = null
         }
     }
 }
