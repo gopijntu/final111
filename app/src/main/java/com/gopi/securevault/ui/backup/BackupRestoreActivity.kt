@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import com.gopi.securevault.ui.BaseActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import com.gopi.securevault.R
 import com.gopi.securevault.backup.BackupManager
@@ -17,7 +17,7 @@ import com.gopi.securevault.util.CryptoPrefs
 import com.gopi.securevault.util.PasswordUtils
 import kotlinx.coroutines.launch
 
-class BackupRestoreActivity : BaseActivity() {
+class BackupRestoreActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityBackupRestoreBinding
     private lateinit var backupManager: BackupManager
@@ -36,7 +36,7 @@ class BackupRestoreActivity : BaseActivity() {
     private val restoreDbLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.also { uri ->
-                showPasswordDialog { password ->
+                showPasswordDialogForRestore { password ->
                     lifecycleScope.launch {
                         backupManager.restoreDatabase(password, uri) {
                             restartApp()
@@ -62,11 +62,9 @@ class BackupRestoreActivity : BaseActivity() {
     private val restoreJsonLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.also { uri ->
-                showPasswordDialog { password ->
+                showPasswordDialogForRestore { password ->
                     lifecycleScope.launch {
-                        backupManager.restoreFromJson(password, uri) {
-                            restartApp()
-                        }
+                        backupManager.restoreFromJson(password, uri)
                     }
                 }
             }
@@ -139,6 +137,26 @@ class BackupRestoreActivity : BaseActivity() {
                     }
                 } else {
                     Toast.makeText(this, "Password required!", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showPasswordDialogForRestore(onPasswordEntered: (String) -> Unit) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_password_prompt, null)
+        val etPassword = dialogView.findViewById<android.widget.EditText>(R.id.etPassword)
+
+        AlertDialog.Builder(this)
+            .setTitle("Enter Backup Password")
+            .setMessage("Enter the password associated with the backup file you are restoring.")
+            .setView(dialogView)
+            .setPositiveButton("OK") { _, _ ->
+                val password = etPassword.text.toString()
+                if (password.isNotEmpty()) {
+                    onPasswordEntered(password)
+                } else {
+                    Toast.makeText(this, "Password cannot be empty.", Toast.LENGTH_SHORT).show()
                 }
             }
             .setNegativeButton("Cancel", null)

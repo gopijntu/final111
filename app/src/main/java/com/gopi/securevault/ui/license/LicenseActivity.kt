@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import com.gopi.securevault.ui.BaseActivity
+import androidx.appcompat.app.AppCompatActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import java.io.File
 import java.io.FileOutputStream
 
-class LicenseActivity : BaseActivity() {
+class LicenseActivity : AppCompatActivity() {
     private lateinit var binding: ActivityLicenseBinding
     private var selectedFileUri: Uri? = null
     private val dao by lazy { AppDatabase.get(this).licenseDao() }

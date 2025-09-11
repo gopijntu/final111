@@ -55,23 +55,30 @@ class ChangePasswordActivity : AppCompatActivity() {
                 try {
                     val dbFile = getDatabasePath("securevault.db")
                     if (dbFile.exists()) {
-                        val db = SQLiteDatabase.openDatabase(dbFile.absolutePath, oldPassword.toCharArray(), null, SQLiteDatabase.OPEN_READWRITE)
-                        db.execSQL("PRAGMA rekey = '$newHash';")
+                        // Open the database with the old hash
+                        val db = SQLiteDatabase.openDatabase(dbFile.absolutePath, oldHash.toCharArray(), null, SQLiteDatabase.OPEN_READWRITE)
+                        // Re-key it to the new hash using the robust API call
+                        db.rekey(newHash.toCharArray())
                         db.close()
                     }
+
+                    // --- Critical: Update prefs ONLY after successful rekey ---
+                    prefs.putString("salt", newSalt)
+                    prefs.putString("master_hash", newHash)
+
+                    // Close the singleton instance to force re-initialization on next launch
+                    com.gopi.securevault.data.db.AppDatabase.closeInstance()
+
+                    Toast.makeText(this, "Password changed successfully. Please log in again.", Toast.LENGTH_LONG).show()
+
+                    val intent = Intent(this, LoginActivity::class.java)
+                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+                    startActivity(intent)
+                    finish()
+
                 } catch (e: Exception) {
-                    Toast.makeText(this, "Warning: could not rekey DB. Restore may require old password. Error: ${e.message}", Toast.LENGTH_LONG).show()
+                    Toast.makeText(this, "Error re-keying database. Password not changed. Error: ${e.message}", Toast.LENGTH_LONG).show()
                 }
-
-                prefs.putString("salt", newSalt)
-                prefs.putString("master_hash", newHash)
-
-                Toast.makeText(this, "Password changed successfully. Please log in again.", Toast.LENGTH_LONG).show()
-
-                val intent = Intent(this, LoginActivity::class.java)
-                intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                startActivity(intent)
-                finish()
             } else {
                 Toast.makeText(this, "Old password is incorrect", Toast.LENGTH_SHORT).show()
             }

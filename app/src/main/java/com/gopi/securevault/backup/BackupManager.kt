@@ -51,20 +51,24 @@ class BackupManager(private val context: Context) {
             val tempBackupDbName = "restore_temp.db"
 
             try {
+                // 1. Copy backup to a temporary file
                 context.contentResolver.openInputStream(sourceUri)?.use { inputStream ->
                     FileOutputStream(tempBackupFile).use { outputStream ->
                         inputStream.copyTo(outputStream)
                     }
                 }
 
+                // 2. Try to open the temporary database with the provided password's hash
+                val newSalt = com.gopi.securevault.util.PasswordUtils.generateSalt()
+                val newHash = com.gopi.securevault.util.PasswordUtils.hashWithSalt(password, newSalt)
                 var isValid = false
                 try {
-                    val factory = SupportFactory(SQLiteDatabase.getBytes(password.toCharArray()))
+                    val factory = SupportFactory(SQLiteDatabase.getBytes(newHash.toCharArray()))
                     val tempDb = Room.databaseBuilder(context, AppDatabase::class.java, tempBackupDbName)
                         .openHelperFactory(factory)
                         .build()
 
-                    tempDb.openHelper.writableDatabase
+                    tempDb.openHelper.writableDatabase // This will trigger the open and validation
                     tempDb.close()
                     isValid = true
                 } catch (e: Exception) {
@@ -72,10 +76,17 @@ class BackupManager(private val context: Context) {
                     isValid = false
                 }
 
+                // 3. If valid, proceed with restore
                 if (isValid) {
                     AppDatabase.closeInstance()
                     val dbFile = context.getDatabasePath(AppDatabase.DATABASE_NAME)
                     tempBackupFile.copyTo(dbFile, overwrite = true)
+
+                    // 4. CRITICAL: Update the app's master password hash to match the restored DB
+                    val prefs = com.gopi.securevault.util.CryptoPrefs(context)
+                    prefs.putString("salt", newSalt)
+                    prefs.putString("master_hash", newHash)
+
                     withContext(Dispatchers.Main) {
                         Toast.makeText(context, "Restore successful! Restarting app...", Toast.LENGTH_LONG).show()
                         onSuccess()
@@ -94,7 +105,7 @@ class BackupManager(private val context: Context) {
                 if (tempBackupFile.exists()) {
                     tempBackupFile.delete()
                 }
-                AppDatabase.get(context)
+                // Don't re-open the database here, let the app do it after restart
             }
         }
     }
@@ -129,7 +140,7 @@ class BackupManager(private val context: Context) {
         }
     }
 
-    suspend fun restoreFromJson(password: String, sourceUri: Uri, onSuccess: () -> Unit) {
+    suspend fun restoreFromJson(password: String, sourceUri: Uri) {
         withContext(Dispatchers.IO) {
             try {
                 val encryptedJson = context.contentResolver.openInputStream(sourceUri)?.use {
@@ -142,6 +153,8 @@ class BackupManager(private val context: Context) {
                 }
                 val backupData = Gson().fromJson(json, BackupData::class.java)
 
+                // This is a simple data import. It does not change the master password.
+                // It happens on the currently open database.
                 db.clearAllTablesManually()
 
                 backupData.aadhar.forEach { db.aadharDao().insert(it) }
@@ -153,8 +166,7 @@ class BackupManager(private val context: Context) {
                 backupData.license.forEach { db.licenseDao().insert(it) }
 
                 withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Restore successful! Restarting app...", Toast.LENGTH_SHORT).show()
-                    onSuccess()
+                    Toast.makeText(context, "JSON data restored successfully!", Toast.LENGTH_SHORT).show()
                 }
             } catch (e: Exception) {
                 e.printStackTrace()
