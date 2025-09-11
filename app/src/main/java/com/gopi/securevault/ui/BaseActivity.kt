@@ -19,14 +19,20 @@ open class BaseActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        // 🔒 Prevent screenshots & screen recording
-       // window.setFlags(
-       //     WindowManager.LayoutParams.FLAG_SECURE,
-       //     WindowManager.LayoutParams.FLAG_SECURE
-       // )
+        // The original file had a commented out section for FLAG_SECURE,
+        // and a line to clear it. I will keep the clearFlags line as it was the
+        // last active state.
         window.clearFlags(WindowManager.LayoutParams.FLAG_SECURE)
+    }
+
+    override fun onResume() {
+        super.onResume()
         resetLogoutTimer()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        logoutHandler.removeCallbacks(logoutRunnable)
     }
 
     override fun onUserInteraction() {
