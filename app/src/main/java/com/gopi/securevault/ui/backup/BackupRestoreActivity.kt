@@ -36,9 +36,9 @@ class BackupRestoreActivity : AppCompatActivity() {
     private val restoreDbLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.also { uri ->
-                showPasswordDialog { password ->
+                showPasswordDialog(isForDbRestore = true) { hash ->
                     lifecycleScope.launch {
-                        backupManager.restoreDatabase(password, uri) {
+                        backupManager.restoreDatabase(hash, uri) {
                             restartApp()
                         }
                     }
@@ -50,7 +50,7 @@ class BackupRestoreActivity : AppCompatActivity() {
     private val backupJsonLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.also { uri ->
-                showPasswordDialog { password ->
+                showPasswordDialog(isForDbRestore = false) { password ->
                     lifecycleScope.launch {
                         backupManager.backupToJson(password, uri)
                     }
@@ -62,7 +62,7 @@ class BackupRestoreActivity : AppCompatActivity() {
     private val restoreJsonLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.also { uri ->
-                showPasswordDialog { password ->
+                showPasswordDialog(isForDbRestore = false) { password ->
                     lifecycleScope.launch {
                         backupManager.restoreFromJson(password, uri) {
                             restartApp()
@@ -120,7 +120,7 @@ class BackupRestoreActivity : AppCompatActivity() {
             .show()
     }
 
-    private fun showPasswordDialog(onPasswordEntered: (String) -> Unit) {
+    private fun showPasswordDialog(isForDbRestore: Boolean = false, onPasswordEntered: (String) -> Unit) {
         val dialogView = layoutInflater.inflate(R.layout.dialog_password_prompt, null)
         val etPassword = dialogView.findViewById<android.widget.EditText>(R.id.etPassword)
 
@@ -133,7 +133,11 @@ class BackupRestoreActivity : AppCompatActivity() {
                     val salt = prefs.getString("salt", null)
                     val hash = prefs.getString("master_hash", null)
                     if (salt != null && hash != null && PasswordUtils.hashWithSalt(password, salt) == hash) {
-                        onPasswordEntered(password)
+                        if (isForDbRestore) {
+                            onPasswordEntered(hash)
+                        } else {
+                            onPasswordEntered(password)
+                        }
                     } else {
                         Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show()
                     }
