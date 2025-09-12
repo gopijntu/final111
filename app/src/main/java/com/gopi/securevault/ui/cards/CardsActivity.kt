@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import com.gopi.securevault.ui.BaseActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -20,7 +20,7 @@ import android.content.ClipData
 import android.content.ClipboardManager
 import androidx.appcompat.widget.TooltipCompat
 
-class CardsActivity : AppCompatActivity() {
+class CardsActivity : BaseActivity() {
     private lateinit var binding: ActivityCardsBinding
     private val dao by lazy { AppDatabase.get(this).cardDao() }
     private val adapter = CardAdapter(
