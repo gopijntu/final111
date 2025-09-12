@@ -27,4 +27,13 @@
         <item name="boxCornerRadiusBottomStart">16dp</item>
         <item name="boxCornerRadiusBottomEnd">16dp</item>
     </style>
+
+    <!-- Style for white outlined text fields on a dark background -->
+    <style name="WhiteOutlinedTextInputLayout" parent="RoundedInputStyle">
+        <item name="boxStrokeColor">@android:color/white</item>
+        <item name="hintTextColor">@android:color/white</item>
+        <item name="android:textColorHint">@android:color/white</item>
+        <item name="android:textColor">@android:color/white</item>
+        <item name="passwordToggleTint">@android:color/white</item>
+    </style>
 </resources>

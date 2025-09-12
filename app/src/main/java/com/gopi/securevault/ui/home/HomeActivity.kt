@@ -11,6 +11,7 @@ import androidx.core.content.ContextCompat
 import com.gopi.securevault.R
 import com.gopi.securevault.databinding.ActivityHomeBinding
 import com.gopi.securevault.ui.BaseActivity
+import com.gopi.securevault.util.CryptoPrefs
 import com.gopi.securevault.ui.aadhar.AadharActivity
 import com.gopi.securevault.ui.auth.LoginActivity
 import com.gopi.securevault.ui.banks.BanksActivity
@@ -25,6 +26,7 @@ import com.google.android.material.card.MaterialCardView
 class HomeActivity : BaseActivity() {
 
     private lateinit var binding: ActivityHomeBinding
+    private lateinit var prefs: CryptoPrefs
 
     private lateinit var menuCards: List<MaterialCardView>
     private val handler = Handler(Looper.getMainLooper())
@@ -38,6 +40,11 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         binding = ActivityHomeBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        // Set welcome message
+        prefs = CryptoPrefs(this)
+        val username = prefs.getString("user_name", "Back")
+        binding.tvWelcome.text = "Welcome $username"
 
         // Initialize cards in proper sequence
         menuCards = listOf(
