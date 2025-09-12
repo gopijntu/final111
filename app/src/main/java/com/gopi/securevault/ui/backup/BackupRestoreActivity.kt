@@ -7,7 +7,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import com.gopi.securevault.ui.BaseActivity
 import androidx.lifecycle.lifecycleScope
 import com.gopi.securevault.R
 import com.gopi.securevault.backup.BackupManager
@@ -17,7 +17,7 @@ import com.gopi.securevault.util.CryptoPrefs
 import com.gopi.securevault.util.PasswordUtils
 import kotlinx.coroutines.launch
 
-class BackupRestoreActivity : AppCompatActivity() {
+class BackupRestoreActivity : BaseActivity() {
 
     private lateinit var binding: ActivityBackupRestoreBinding
     private lateinit var backupManager: BackupManager

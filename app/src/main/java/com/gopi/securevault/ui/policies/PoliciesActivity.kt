@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import com.gopi.securevault.ui.BaseActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -16,7 +16,7 @@ import com.gopi.securevault.databinding.ItemPolicyBinding
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
-class PoliciesActivity : AppCompatActivity() {
+class PoliciesActivity : BaseActivity() {
     private lateinit var binding: ActivityPoliciesBinding
     private val dao by lazy { AppDatabase.get(this).policyDao() }
     private val adapter = PolicyAdapter(

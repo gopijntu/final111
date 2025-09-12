@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
-import androidx.appcompat.app.AppCompatActivity
+import com.gopi.securevault.ui.BaseActivity
 import androidx.lifecycle.lifecycleScope
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -26,7 +26,7 @@ import com.gopi.securevault.util.AppConstants
 import java.io.File
 import java.io.FileOutputStream
 
-class AadharActivity : AppCompatActivity() {
+class AadharActivity : BaseActivity() {
     private lateinit var binding: ActivityAadharBinding
     private var selectedFileUri: Uri? = null
     private val dao by lazy { AppDatabase.get(this).aadharDao() }
