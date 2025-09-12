@@ -48,6 +48,9 @@
             android:exported="false" />
         <activity android:name=".ui.auth.PasswordResetActivity"
             android:exported="false" />
+        <activity android:name=".ui.auth.ChangePasswordActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.settings.SettingsActivity" />
 
         <!-- Launcher activity MUST be exported -->
         <activity
