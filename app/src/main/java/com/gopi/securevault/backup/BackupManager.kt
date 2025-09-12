@@ -62,6 +62,7 @@ class BackupManager(private val context: Context) {
                     val factory = SupportFactory(SQLiteDatabase.getBytes(password.toCharArray()))
                     val tempDb = Room.databaseBuilder(context, AppDatabase::class.java, tempBackupDbName)
                         .openHelperFactory(factory)
+                    .fallbackToDestructiveMigration()
                         .build()
 
                     tempDb.openHelper.writableDatabase
