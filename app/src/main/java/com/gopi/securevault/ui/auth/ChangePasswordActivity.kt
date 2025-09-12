@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.gopi.securevault.databinding.ActivityChangePasswordBinding
+import com.gopi.securevault.data.db.AppDatabase
 import com.gopi.securevault.util.CryptoPrefs
 import com.gopi.securevault.util.PasswordUtils
 import net.sqlcipher.database.SQLiteDatabase
@@ -65,6 +66,9 @@ class ChangePasswordActivity : AppCompatActivity() {
 
                 prefs.putString("salt", newSalt)
                 prefs.putString("master_hash", newHash)
+
+                // Close the database instance to force re-initialization with the new password
+                AppDatabase.closeInstance()
 
                 Toast.makeText(this, "Password changed successfully. Please log in again.", Toast.LENGTH_LONG).show()
 
