@@ -33,6 +33,9 @@
         <activity android:name=".ui.license.LicenseActivity"
             android:exported="false"
             android:parentActivityName=".ui.home.HomeActivity" />
+        <activity android:name=".ui.misc.MiscActivity"
+            android:exported="false"
+            android:parentActivityName=".ui.home.HomeActivity" />
         <activity android:name=".ui.policies.PoliciesActivity"
             android:exported="false"
             android:parentActivityName=".ui.home.HomeActivity" />

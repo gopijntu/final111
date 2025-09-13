@@ -31,10 +31,10 @@
         android:layout_height="0dp"
         android:layout_marginTop="16dp"
         android:alignmentMode="alignMargins"
-        android:columnCount="3"
+        android:columnCount="2"
         android:columnOrderPreserved="false"
         android:padding="4dp"
-        android:rowCount="3"
+        android:rowCount="5"
         app:layout_constraintBottom_toTopOf="@+id/btnLogout"
         app:layout_constraintTop_toBottomOf="@id/tvWelcome">
 
@@ -342,6 +342,8 @@
             android:layout_rowWeight="1"
             android:layout_columnWeight="1"
             android:layout_margin="8dp"
+            android:layout_columnSpan="2"
+            android:layout_gravity="center_horizontal"
             app:cardBackgroundColor="#000000"
             app:cardCornerRadius="16dp"
             app:cardElevation="6dp"
