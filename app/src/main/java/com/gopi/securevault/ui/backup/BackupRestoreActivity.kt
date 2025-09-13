@@ -62,7 +62,7 @@ class BackupRestoreActivity : AppCompatActivity() {
     private val restoreJsonLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
             result.data?.data?.also { uri ->
-                showPasswordDialog(isForDbRestore = false) { password ->
+                showPasswordPrompt { password ->
                     lifecycleScope.launch {
                         backupManager.restoreFromJson(password, uri) {
                             restartApp()
@@ -141,6 +141,25 @@ class BackupRestoreActivity : AppCompatActivity() {
                     } else {
                         Toast.makeText(this, "Incorrect password", Toast.LENGTH_SHORT).show()
                     }
+                } else {
+                    Toast.makeText(this, "Password required!", Toast.LENGTH_SHORT).show()
+                }
+            }
+            .setNegativeButton("Cancel", null)
+            .show()
+    }
+
+    private fun showPasswordPrompt(onPasswordEntered: (String) -> Unit) {
+        val dialogView = layoutInflater.inflate(R.layout.dialog_password_prompt, null)
+        val etPassword = dialogView.findViewById<android.widget.EditText>(R.id.etPassword)
+
+        AlertDialog.Builder(this)
+            .setTitle("Enter Master Password")
+            .setView(dialogView)
+            .setPositiveButton("OK") { _, _ ->
+                val password = etPassword.text.toString()
+                if (password.isNotEmpty()) {
+                    onPasswordEntered(password)
                 } else {
                     Toast.makeText(this, "Password required!", Toast.LENGTH_SHORT).show()
                 }
