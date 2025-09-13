@@ -34,8 +34,8 @@
         android:columnCount="2"
         android:columnOrderPreserved="false"
         android:padding="4dp"
-        android:rowCount="5"
-        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
+        android:rowCount="4"
+        app:layout_constraintBottom_toTopOf="@+id/btnSettings"
         app:layout_constraintTop_toBottomOf="@id/tvWelcome">
 
         <!-- Banks -->
@@ -334,46 +334,24 @@
             </LinearLayout>
         </com.google.android.material.card.MaterialCardView>
 
-        <!-- Settings -->
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/btnSettings"
-            android:layout_width="0dp"
-            android:layout_height="0dp"
-            android:layout_rowWeight="1"
-            android:layout_columnWeight="1"
-            android:layout_margin="8dp"
-            android:layout_columnSpan="2"
-            android:layout_gravity="center_horizontal"
-            app:cardBackgroundColor="#000000"
-            app:cardCornerRadius="16dp"
-            app:cardElevation="6dp"
-            app:strokeColor="@color/glow_cyan"
-            app:strokeWidth="0dp">
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:gravity="center"
-                android:orientation="vertical"
-                android:padding="16dp">
-                <com.mikepenz.iconics.view.IconicsImageView
-                    android:layout_width="48dp"
-                    android:layout_height="48dp"
-                    app:iiv_color="@android:color/white"
-                    app:iiv_icon="gmd-settings" />
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:gravity="center"
-                    android:text="Settings"
-                    android:textColor="@android:color/white"
-                    android:textSize="16sp"
-                    android:textStyle="bold" />
-            </LinearLayout>
-        </com.google.android.material.card.MaterialCardView>
-
     </GridLayout>
+
+    <!-- Settings Button -->
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btnSettings"
+        style="@style/PillButtonStyle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="8dp"
+        android:backgroundTint="#333333"
+        android:text="Settings"
+        app:iconGravity="textStart"
+        app:iconTint="@android:color/white"
+        app:layout_constraintBottom_toTopOf="@+id/btnLogout"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <!-- Logout Button -->
     <com.google.android.material.button.MaterialButton

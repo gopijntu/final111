@@ -55,8 +55,7 @@ class HomeActivity : BaseActivity() {
             binding.btnPan,
             binding.btnLicense,
             binding.btnVoterId,
-            binding.btnMisc,
-            binding.btnSettings
+            binding.btnMisc
         )
 
         // Set up click listeners
