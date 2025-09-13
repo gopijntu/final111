@@ -55,6 +55,7 @@ class HomeActivity : BaseActivity() {
             binding.btnPan,
             binding.btnLicense,
             binding.btnVoterId,
+            binding.btnMisc,
             binding.btnSettings
         )
 
@@ -66,6 +67,7 @@ class HomeActivity : BaseActivity() {
         binding.btnPan.setOnClickListener { startActivity(Intent(this, PanActivity::class.java)) }
         binding.btnLicense.setOnClickListener { startActivity(Intent(this, LicenseActivity::class.java)) }
         binding.btnVoterId.setOnClickListener { startActivity(Intent(this, VoterIdActivity::class.java)) }
+        binding.btnMisc.setOnClickListener { startActivity(Intent(this, com.gopi.securevault.ui.misc.MiscActivity::class.java)) }
         binding.btnSettings.setOnClickListener { startActivity(Intent(this, SettingsActivity::class.java)) }
         binding.btnLogout.setOnClickListener {
             val intent = Intent(this, LoginActivity::class.java)

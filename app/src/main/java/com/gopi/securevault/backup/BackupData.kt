@@ -15,5 +15,6 @@ data class BackupData(
     val policies: List<PolicyEntity>,
     val pan: List<PanEntity>,
     val voterId: List<VoterIdEntity>,
-    val license: List<LicenseEntity>
+    val license: List<LicenseEntity>,
+    val misc: List<com.gopi.securevault.data.entities.MiscEntity>
 )
