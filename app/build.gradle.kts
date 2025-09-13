@@ -12,8 +12,8 @@ android {
         applicationId = "com.gopi.securevault"
         minSdk = 26
         targetSdk = 35
-        versionCode = 8          // First release
-        versionName = "4"      // Human-readable version
+        versionCode = 9          // First release
+        versionName = "5"      // Human-readable version
 
         // Needed for SQLCipher native libs
         ndk {
