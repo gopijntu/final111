@@ -21,84 +21,6 @@ class BackupManager(private val context: Context) {
 
     private val db by lazy { AppDatabase.get(context) }
 
-    suspend fun backupDatabase(destinationUri: Uri) {
-        withContext(Dispatchers.IO) {
-            try {
-                AppDatabase.closeInstance()
-                val dbFile = context.getDatabasePath(AppDatabase.DATABASE_NAME)
-                context.contentResolver.openOutputStream(destinationUri)?.use { outputStream ->
-                    dbFile.inputStream().use { inputStream ->
-                        inputStream.copyTo(outputStream)
-                    }
-                }
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Backup successful!", Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Backup failed: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-            } finally {
-                AppDatabase.get(context)
-            }
-        }
-    }
-
-    suspend fun restoreDatabase(password: String, sourceUri: Uri, onSuccess: () -> Unit) {
-        withContext(Dispatchers.IO) {
-            val tempBackupFile = File(context.cacheDir, "restore_temp.db")
-            val tempBackupDbName = "restore_temp.db"
-
-            try {
-                context.contentResolver.openInputStream(sourceUri)?.use { inputStream ->
-                    FileOutputStream(tempBackupFile).use { outputStream ->
-                        inputStream.copyTo(outputStream)
-                    }
-                }
-
-                var isValid = false
-                try {
-                    val factory = SupportFactory(SQLiteDatabase.getBytes(password.toCharArray()))
-                    val tempDb = Room.databaseBuilder(context, AppDatabase::class.java, tempBackupDbName)
-                        .openHelperFactory(factory)
-                    .fallbackToDestructiveMigration()
-                        .build()
-
-                    tempDb.openHelper.writableDatabase
-                    tempDb.close()
-                    isValid = true
-                } catch (e: Exception) {
-                    e.printStackTrace()
-                    isValid = false
-                }
-
-                if (isValid) {
-                    AppDatabase.closeInstance()
-                    val dbFile = context.getDatabasePath(AppDatabase.DATABASE_NAME)
-                    tempBackupFile.copyTo(dbFile, overwrite = true)
-                    withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Restore successful! Restarting app...", Toast.LENGTH_LONG).show()
-                        onSuccess()
-                    }
-                } else {
-                     withContext(Dispatchers.Main) {
-                        Toast.makeText(context, "Restore failed: Incorrect password or corrupt backup file.", Toast.LENGTH_LONG).show()
-                    }
-                }
-            } catch (e: Exception) {
-                e.printStackTrace()
-                withContext(Dispatchers.Main) {
-                    Toast.makeText(context, "Restore failed: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-            } finally {
-                if (tempBackupFile.exists()) {
-                    tempBackupFile.delete()
-                }
-                AppDatabase.get(context)
-            }
-        }
-    }
 
     suspend fun backupToJson(password: String, destinationUri: Uri) {
         withContext(Dispatchers.IO) {
@@ -166,8 +88,8 @@ class BackupManager(private val context: Context) {
         }
     }
 
-    fun getBackupFileName(isJson: Boolean): String {
+    fun getBackupFileName(): String {
         val timestamp = SimpleDateFormat("yyyyMMdd_HHmmss", Locale.getDefault()).format(Date())
-        return if (isJson) "securevault_backup_$timestamp.vaultbackup" else "securevault_backup_$timestamp.db"
+        return "securevault_backup_$timestamp.vaultbackup"
     }
 }

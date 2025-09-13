@@ -23,29 +23,6 @@ class BackupRestoreActivity : AppCompatActivity() {
     private lateinit var backupManager: BackupManager
     private lateinit var prefs: CryptoPrefs
 
-    private val backupDbLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.data?.also { uri ->
-                lifecycleScope.launch {
-                    backupManager.backupDatabase(uri)
-                }
-            }
-        }
-    }
-
-    private val restoreDbLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == Activity.RESULT_OK) {
-            result.data?.data?.also { uri ->
-                showPasswordDialog(isForDbRestore = true) { hash ->
-                    lifecycleScope.launch {
-                        backupManager.restoreDatabase(hash, uri) {
-                            restartApp()
-                        }
-                    }
-                }
-            }
-        }
-    }
 
     private val backupJsonLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
         if (result.resultCode == Activity.RESULT_OK) {
@@ -95,29 +72,11 @@ class BackupRestoreActivity : AppCompatActivity() {
     }
 
     private fun showBackupOptions() {
-        val options = arrayOf("Backup as .db file", "Backup as .vaultbackup file")
-        AlertDialog.Builder(this)
-            .setTitle("Choose Backup Format")
-            .setItems(options) { _, which ->
-                when (which) {
-                    0 -> openFilePickerForDbBackup()
-                    1 -> openFilePickerForJsonBackup()
-                }
-            }
-            .show()
+        openFilePickerForJsonBackup()
     }
 
     private fun showRestoreOptions() {
-        val options = arrayOf("Restore from .db file", "Restore from .vaultbackup file")
-        AlertDialog.Builder(this)
-            .setTitle("Choose Restore Source")
-            .setItems(options) { _, which ->
-                when (which) {
-                    0 -> openFilePickerForDbRestore()
-                    1 -> openFilePickerForJsonRestore()
-                }
-            }
-            .show()
+        openFilePickerForJsonRestore()
     }
 
     private fun showPasswordDialog(isForDbRestore: Boolean = false, onPasswordEntered: (String) -> Unit) {
@@ -175,28 +134,12 @@ class BackupRestoreActivity : AppCompatActivity() {
         finish()
     }
 
-    private fun openFilePickerForDbBackup() {
-        val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "application/octet-stream"
-            putExtra(Intent.EXTRA_TITLE, backupManager.getBackupFileName(false))
-        }
-        backupDbLauncher.launch(intent)
-    }
-
-    private fun openFilePickerForDbRestore() {
-        val intent = Intent(Intent.ACTION_OPEN_DOCUMENT).apply {
-            addCategory(Intent.CATEGORY_OPENABLE)
-            type = "*/*"
-        }
-        restoreDbLauncher.launch(intent)
-    }
 
     private fun openFilePickerForJsonBackup() {
         val intent = Intent(Intent.ACTION_CREATE_DOCUMENT).apply {
             addCategory(Intent.CATEGORY_OPENABLE)
             type = "application/octet-stream"
-            putExtra(Intent.EXTRA_TITLE, backupManager.getBackupFileName(true))
+            putExtra(Intent.EXTRA_TITLE, backupManager.getBackupFileName())
         }
         backupJsonLauncher.launch(intent)
     }
