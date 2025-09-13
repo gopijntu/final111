@@ -32,7 +32,8 @@ class BackupManager(private val context: Context) {
                     policies = db.policyDao().getAll(),
                     pan = db.panDao().getAll(),
                     voterId = db.voterIdDao().getAll(),
-                    license = db.licenseDao().getAll()
+                    license = db.licenseDao().getAll(),
+                    misc = db.miscDao().getAll()
                 )
                 val json = Gson().toJson(backupData)
                 val encryptedJson = AESUtils.encrypt(json, password)
@@ -74,6 +75,7 @@ class BackupManager(private val context: Context) {
                 backupData.pan.forEach { db.panDao().insert(it) }
                 backupData.voterId.forEach { db.voterIdDao().insert(it) }
                 backupData.license.forEach { db.licenseDao().insert(it) }
+                backupData.misc.forEach { db.miscDao().insert(it) }
 
                 withContext(Dispatchers.Main) {
                     Toast.makeText(context, "Restore successful! Restarting app...", Toast.LENGTH_SHORT).show()

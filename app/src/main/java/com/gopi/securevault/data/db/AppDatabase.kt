@@ -11,8 +11,8 @@ import net.sqlcipher.database.SQLiteDatabase
 import com.gopi.securevault.util.CryptoPrefs
 
 @Database(
-    entities = [BankEntity::class, CardEntity::class, PolicyEntity::class, AadharEntity::class, PanEntity::class, VoterIdEntity::class, LicenseEntity::class],
-    version = 4,
+    entities = [BankEntity::class, CardEntity::class, PolicyEntity::class, AadharEntity::class, PanEntity::class, VoterIdEntity::class, LicenseEntity::class, MiscEntity::class],
+    version = 5,
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -23,6 +23,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun panDao(): PanDao
     abstract fun voterIdDao(): VoterIdDao
     abstract fun licenseDao(): LicenseDao
+    abstract fun miscDao(): MiscDao
 
     suspend fun clearAllTablesManually() {
         clearAllTables()
